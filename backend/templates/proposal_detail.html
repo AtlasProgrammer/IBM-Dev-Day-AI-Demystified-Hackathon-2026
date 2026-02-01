@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <div class="h2">Proposal #{{ proposal.id }}</div>
+  <div class="muted" style="margin-top: 8px;">
+    Status: <span class="tag neutral">{{ proposal.status.value }}</span>
+    · Recruiter: <b>{{ proposal.recruiter_name }}</b> ({{ proposal.recruiter_email }})
+  </div>
+  {% if candidate %}
+    <div class="muted" style="margin-top: 8px;">
+      Candidate: <b>{{ candidate.name }}</b> ({{ candidate.email }}) · Job: <b>{{ proposal.job_title }}</b>
+    </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-title">Select a slot and approve</div>
+  <div class="card-sub">This demonstrates human-in-the-loop: the agent proposes options and a human approves one.</div>
+
+  <form method="post" action="/proposals/{{ proposal.id }}/approve" style="margin-top: 14px;">
+    <label>Option</label>
+    <select name="option_id">
+      {% for o in options %}
+        <option value="{{ o.id }}">{{ o.start }} → {{ o.end }}</option>
+      {% endfor %}
+    </select>
+
+    <div class="hr"></div>
+
+    <label>Interviewers (IDs)</label>
+    <div class="muted" style="font-size: 12px; margin-bottom: 6px;">For the demo: use 1,2,3 (checkboxes) — the project uses seeded user IDs.</div>
+    <div class="row">
+      <div class="col">
+        <label style="font-weight: 500; text-transform:none; letter-spacing:0; color: var(--text);">
+          <input type="checkbox" name="interviewer_user_ids" value="1" checked />
+          interviewer_user_ids: 1
+        </label>
+        <label style="font-weight: 500; text-transform:none; letter-spacing:0; color: var(--text);">
+          <input type="checkbox" name="interviewer_user_ids" value="2" checked />
+          interviewer_user_ids: 2
+        </label>
+        <label style="font-weight: 500; text-transform:none; letter-spacing:0; color: var(--text);">
+          <input type="checkbox" name="interviewer_user_ids" value="3" checked />
+          interviewer_user_ids: 3
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px;">
+      <button type="submit" class="btn btn-primary">Approve & schedule</button>
+      <a class="btn btn-secondary" href="/proposals">Back</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
+

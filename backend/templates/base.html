@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title or "Interview Scheduling Autopilot" }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --ibm-blue-60: #0f62fe;
+        --ibm-blue-70: #0043ce;
+        --nav: #000000;
+        --text: #161616;
+        --muted: #525252;
+        --bg: #ffffff;
+        --surface: #ffffff;
+        --surface-alt: #f4f4f4;
+        --border: #e0e0e0;
+        --border-strong: #c6c6c6;
+        --danger-bg: #fff1f1;
+        --danger-border: #ffd7d9;
+        --radius: 0px;
+        --shadow: 0 6px 20px rgba(0,0,0,0.08);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+
+      body {
+        font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        margin: 0;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 24px 40px; }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px;
+        margin: 12px 0;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+      }
+
+      .row { display: flex; gap: 16px; flex-wrap: wrap; }
+      .col { flex: 1 1 280px; }
+      label { display: block; font-weight: 600; margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+      input, select, textarea {
+        width: 100%;
+        padding: 12px 12px;
+        border: 1px solid var(--border-strong);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--text);
+        outline: none;
+      }
+      input:focus, select:focus, textarea:focus { border-color: var(--ibm-blue-60); box-shadow: 0 0 0 3px rgba(15,98,254,0.20); }
+
+      input[type="checkbox"] { width: auto; padding: 0; border-radius: 2px; }
+
+      input::placeholder, textarea::placeholder { color: #8d8d8d; }
+      textarea { min-height: 120px; }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 0;
+        cursor: pointer;
+        font-weight: 600;
+        border: 1px solid transparent;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .btn-primary { background: var(--ibm-blue-60); color: #fff; }
+      .btn-primary:hover { background: var(--ibm-blue-70); text-decoration: none; }
+      .btn-secondary { background: transparent; color: var(--ibm-blue-60); border-color: var(--ibm-blue-60); }
+      .btn-secondary:hover { background: rgba(15,98,254,0.08); text-decoration: none; }
+      button.btn { font-family: inherit; }
+      .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #f4f4f4; border: 1px solid var(--border); font-size: 12px; color: #393939; }
+      .muted { color: var(--muted); }
+      a { color: var(--ibm-blue-60); text-decoration: underline; text-underline-offset: 3px; }
+      a:hover { color: var(--ibm-blue-70); }
+      .warn { background: var(--danger-bg); border: 1px solid var(--danger-border); color: #a2191f; padding: 12px 14px; border-radius: var(--radius); }
+
+      .masthead {
+        background: var(--nav);
+        color: white;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.18);
+      }
+      .masthead .inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+      .brand { display:flex; align-items:center; gap: 12px; }
+      .brand-title { font-weight: 700; font-size: 16px; letter-spacing: 0.01em; }
+      .brand-sub { color: rgba(255,255,255,0.72); font-size: 12px; margin-top: 2px; }
+
+      .topnav { display:flex; gap: 14px; flex-wrap: wrap; }
+      .navlink { color: rgba(255,255,255,0.88); padding: 8px 0; border-bottom: 2px solid transparent; text-decoration: none; }
+      .navlink:hover { color: #fff; text-decoration: none; }
+      .navlink.active { border-bottom-color: #fff; color: #fff; }
+
+      .hr { height: 1px; background: var(--border); margin: 14px 0; }
+
+      .grid-2 { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; }
+      @media (max-width: 960px) { .grid-2 { grid-template-columns: 1fr; } }
+      .page { padding-top: 26px; }
+      .section { padding: 28px 0; }
+      .section.alt { background: var(--surface-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+      .h1 { font-size: 34px; line-height: 1.15; font-weight: 700; margin: 0; }
+      .h2 { font-size: 18px; line-height: 1.3; font-weight: 700; margin: 0; }
+      .lead { margin: 12px 0 0; font-size: 15px; color: var(--muted); max-width: 72ch; }
+
+      .hero { padding: 10px 0 0; }
+      .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 18px; align-items: start; }
+      @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; } }
+      .hero-actions { display:flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+      .footer { background: #000; color: rgba(255,255,255,0.75); padding: 22px 0; margin-top: 34px; }
+      .footer .inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; font-size: 12px; }
+
+      .card-title { font-weight: 700; font-size: 14px; margin: 0; }
+      .card-sub { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+      .table-wrap { border: 1px solid var(--border); background: var(--surface); overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 14px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+      th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); background: #fff; }
+      tr:hover td { background: #fafafa; }
+
+      .tag { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; color: #393939; background: #f4f4f4; }
+      .tag.good { background: rgba(36,161,72,0.10); border-color: rgba(36,161,72,0.25); color: #0e6027; }
+      .tag.warn { background: rgba(255,131,43,0.12); border-color: rgba(255,131,43,0.30); color: #8a3800; }
+      .tag.neutral { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.10); color: #393939; }
+
+      .page { opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 220ms ease; }
+      .is-navigating .page { opacity: 0; transform: translateY(6px); }
+      .page-enter { animation: pageEnter 260ms cubic-bezier(.2,.8,.2,1) both; }
+      @keyframes pageEnter {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .page, .is-navigating .page { transition: none; transform: none; }
+        .page-enter { animation: none; }
+      }
+
+      @supports (view-transition-name: root) {
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+          animation-duration: 220ms;
+          animation-timing-function: cubic-bezier(.2,.8,.2,1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="masthead">
+      <div class="inner">
+        <div class="brand">
+          <div>
+            <div class="brand-title">Interview Scheduling Autopilot</div>
+            <div class="brand-sub">watsonx Orchestrate tool • watsonx.ai summary (optional)</div>
+          </div>
+        </div>
+        <div class="topnav">
+          <a class="navlink {% if request and request.url.path == '/' %}active{% endif %}" href="/">Recruiter UI</a>
+          <a class="navlink {% if request and request.url.path.startswith('/interviews') %}active{% endif %}" href="/interviews">Interviews</a>
+          <a class="navlink {% if request and request.url.path.startswith('/proposals') %}active{% endif %}" href="/proposals">HITL</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container page">
+
+      <div class="warn">
+        For demos, use synthetic test data only (example.com) — no real personal data.
+      </div>
+
+      {% if message %}
+        <div class="card">{{ message }}</div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+
+    <div class="footer">
+      <div class="inner">
+        Prototype for IBM Dev Day hackathon • Used as a tool from watsonx Orchestrate (OpenAPI).
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        try { document.querySelector('.page')?.classList.add('page-enter'); } catch (e) {}
+
+        function shouldHandle(a) {
+          if (!a) return false;
+          if (a.target && a.target !== '_self') return false;
+          const href = a.getAttribute('href');
+          if (!href) return false;
+          if (href.startsWith('http')) return false;
+          if (href.startsWith('#')) return false;
+          if (a.hasAttribute('download')) return false;
+          return true;
+        }
+
+        document.addEventListener('click', function (e) {
+          const a = e.target && e.target.closest ? e.target.closest('a') : null;
+          if (!shouldHandle(a)) return;
+
+          if (!a.classList.contains('navlink')) return;
+
+          const url = a.getAttribute('href');
+          if (!url) return;
+
+          if (document.startViewTransition) {
+            e.preventDefault();
+            document.startViewTransition(function () {
+              window.location.href = url;
+            });
+            return;
+          }
+
+          e.preventDefault();
+          document.documentElement.classList.add('is-navigating');
+          window.setTimeout(function () { window.location.href = url; }, 180);
+        }, true);
+      })();
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <div class="h2">Feedback</div>
+  <div class="muted" style="margin-top: 6px;">
+    Candidate: <b>{{ candidate_name }}</b> · Job: <b>{{ job_title }}</b>
+  </div>
+</div>
+
+<form method="post" action="/f/{{ token }}" class="card">
+  <label>Decision</label>
+  <select name="decision">
+    <option value="pass">Pass</option>
+    <option value="fail">Fail</option>
+    <option value="need_more_info">Need more info</option>
+  </select>
+
+  <label>Comment</label>
+  <textarea name="comment" placeholder="Briefly: strengths / risks / open questions"></textarea>
+
+  <div style="margin-top: 14px;">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+
+{% endblock %}
+

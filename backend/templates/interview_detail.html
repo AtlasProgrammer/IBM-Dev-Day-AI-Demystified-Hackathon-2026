@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <div style="font-weight: 700; font-size: 16px;">{{ interview.candidate_name }} — {{ interview.job_title }}</div>
+  <div class="muted" style="margin-top: 6px;">
+    {{ interview.scheduled_start }} → {{ interview.scheduled_end }} · <span class="pill">{{ interview.status }}</span>
+  </div>
+  <div style="margin-top: 10px;">
+    <div><b>Video link:</b> <a href="{{ interview.video_link }}">{{ interview.video_link }}</a></div>
+    <div class="muted" style="margin-top: 6px;"><b>Recruiter:</b> {{ interview.recruiter_name }} ({{ interview.recruiter_email }})</div>
+  </div>
+</div>
+
+<div class="card">
+  <div style="font-weight: 700; font-size: 14px;">Interviewers</div>
+  <div style="margin-top: 8px;">
+    {% for p in interview.participants %}
+      <div>{{ p.name }} <span class="pill">{{ p.role }}</span> <span class="muted">({{ p.email }})</span></div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card">
+  <div style="font-weight: 700; font-size: 14px;">ATS / Report</div>
+  {% if interview.report_url %}
+    <div style="margin-top: 8px;"><a href="{{ interview.report_url }}">Open report</a></div>
+  {% else %}
+    <div class="muted" style="margin-top: 8px;">The report will appear after feedback is collected.</div>
+  {% endif %}
+</div>
+
+{% endblock %}
+

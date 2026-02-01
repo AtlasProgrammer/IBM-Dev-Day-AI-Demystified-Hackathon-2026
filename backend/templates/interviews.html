@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <div class="h2">Interviews</div>
+  <div class="muted" style="margin-top: 8px;">All interviews and the current workflow status.</div>
+</div>
+
+{% if interviews|length > 0 %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Candidate</th>
+          <th>Job</th>
+          <th>Slot</th>
+          <th>Status</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for it in interviews %}
+          <tr>
+            <td>
+              <div style="font-weight: 700;">{{ it.candidate_name }}</div>
+              <div class="muted" style="font-size: 12px;">{{ it.candidate_email }}</div>
+            </td>
+            <td>{{ it.job_title }}</td>
+            <td class="muted">{{ it.scheduled_start }} → {{ it.scheduled_end }}</td>
+            <td>
+              {% set tag_class = "neutral" %}
+              {% if it.status == "feedback_received" %}
+                {% set tag_class = "good" %}
+              {% elif it.status == "feedback_requested" %}
+                {% set tag_class = "warn" %}
+              {% endif %}
+              <span class="tag {{ tag_class }}">{{ it.status }}</span>
+            </td>
+            <td>
+              <a href="/interviews/{{ it.id }}">Open</a>
+              {% if it.report_url %}
+                · <a href="{{ it.report_url }}">Report</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+
+{% if interviews|length == 0 %}
+  <div class="card">No interviews yet. Create one via <a href="/">Recruiter UI</a>.</div>
+{% endif %}
+
+{% endblock %}
+

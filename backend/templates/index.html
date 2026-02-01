@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="hero">
+  <div class="hero-grid">
+    <div class="hero-box">
+      <div class="h1">Interview Scheduling Autopilot</div>
+      <div class="lead">End-to-end orchestration from “screening passed” to the final report: shared slot → invites → reminder → feedback → summary → ATS update.</div>
+      <div class="hero-actions">
+        <a class="btn btn-secondary" href="/openapi.json">OpenAPI</a>
+        <a class="btn btn-secondary" href="/interviews">Interviews</a>
+      </div>
+    </div>
+    <div class="card" style="margin:0;">
+      <div class="card-title">Integration (IBM)</div>
+      <div class="card-sub">Hackathon mode: watsonx Orchestrate uses this backend as a tool. watsonx.ai is optional for summaries.</div>
+      <div class="hr"></div>
+      <div style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+        - Orchestrate tool: <a href="/openapi.json">/openapi.json</a><br/>
+        - Users API: <a href="/api/users">/api/users</a><br/>
+        - Candidates API: <a href="/api/candidates">/api/candidates</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <form method="post" action="/start" class="card">
+    <div class="card-title">Start workflow</div>
+    <div class="card-sub">Provide candidate, interviewers, and a preferred time window — the agent will find a shared slot and run the workflow.</div>
+
+    <div class="row" style="margin-top: 10px;">
+      <div class="col">
+        <label>Recruiter name</label>
+        <input name="recruiter_name" value="Recruiter" />
+      </div>
+      <div class="col">
+        <label>Recruiter email</label>
+        <input name="recruiter_email" value="recruiter@example.com" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label>Candidate</label>
+        <select name="candidate_id">
+          {% for c in candidates %}
+            <option value="{{ c.id }}">{{ c.name }} ({{ c.email }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col">
+        <label>Job title</label>
+        <input name="job_title" value="Backend Engineer" />
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <label>Interviewers (select at least 1)</label>
+    <div class="row">
+      {% for u in users %}
+        <div class="col">
+          <label style="font-weight: 500; text-transform:none; letter-spacing:0; color: var(--text);">
+            <input type="checkbox" name="interviewer_user_ids" value="{{ u.id }}" checked />
+            {{ u.name }} <span class="pill">{{ u.role.value }}</span>
+            <div class="muted" style="font-size: 12px;">{{ u.email }}</div>
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row">
+      <div class="col">
+        <label>Window (start) — ISO</label>
+        <input name="window_start" value="{{ window_start }}" />
+        <div class="muted" style="font-size: 12px;">Example: 2026-01-31T12:00:00+03:00</div>
+      </div>
+      <div class="col">
+        <label>Window (end) — ISO</label>
+        <input name="window_end" value="{{ window_end }}" />
+      </div>
+      <div class="col">
+        <label>Duration (minutes)</label>
+        <input name="duration_minutes" value="60" />
+      </div>
+    </div>
+
+    <div style="margin-top: 16px;">
+      <button type="submit" class="btn btn-primary">Schedule interview</button>
+    </div>
+  </form>
+
+  <div class="card">
+    <div class="card-title">Demo tip</div>
+    <div class="card-sub">In “invites” and Slack notifications you will see links to the feedback form and the final report.</div>
+
+    <div class="hr"></div>
+
+    <div class="muted" style="font-size: 13px;">
+      - OpenAPI (for Orchestrate): <a href="/openapi.json">/openapi.json</a><br/>
+      - Users API: <a href="/api/users">/api/users</a><br/>
+      - Candidates API: <a href="/api/candidates">/api/candidates</a><br/>
+      - Interviews: <a href="/interviews">/interviews</a>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="muted" style="font-size: 13px;">
+      IBM-first positioning: Orchestrate calls our backend as a tool, and watsonx.ai (optional) generates the summary.
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

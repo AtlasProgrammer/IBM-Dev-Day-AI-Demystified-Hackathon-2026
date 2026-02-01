@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <div class="h2">Interview report</div>
+  <div class="muted" style="margin-top: 8px;">
+    Candidate: <b>{{ interview.candidate_name }}</b> · Job: <b>{{ interview.job_title }}</b>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <tbody>
+      <tr>
+        <th style="width: 240px;">ATS status</th>
+        <td>{{ ats_status }}</td>
+      </tr>
+      <tr>
+        <th>Recommendation</th>
+        <td>{{ recommendation }}</td>
+      </tr>
+      <tr>
+        <th>Updated</th>
+        <td class="muted">{{ updated_at }}</td>
+      </tr>
+      <tr>
+        <th>Meeting link</th>
+        <td><a href="{{ interview.video_link }}">{{ interview.video_link }}</a></td>
+      </tr>
+      <tr>
+        <th>Slot</th>
+        <td class="muted">{{ interview.scheduled_start }} → {{ interview.scheduled_end }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="h2">Summary</div>
+  {% if summary %}
+    <pre style="white-space: pre-wrap; margin-top: 10px;">{{ summary }}</pre>
+  {% else %}
+    <div class="muted" style="margin-top: 8px;">The summary will appear after feedback is collected.</div>
+  {% endif %}
+</div>
+
+{% endblock %}
+

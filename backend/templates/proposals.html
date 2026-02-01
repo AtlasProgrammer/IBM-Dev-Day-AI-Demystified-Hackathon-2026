@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <div class="h2">Scheduling proposals (HITL)</div>
+  <div class="muted" style="margin-top: 8px;">
+    Human-in-the-loop step: propose 2–3 time slots first, then the recruiter approves one.
+  </div>
+</div>
+
+{% if proposals|length > 0 %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Candidate</th>
+          <th>Job</th>
+          <th>Status</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in proposals %}
+          <tr>
+            <td>#{{ p.id }}</td>
+            <td>{{ p.candidate_id }}</td>
+            <td>{{ p.job_title }}</td>
+            <td><span class="tag neutral">{{ p.status.value }}</span></td>
+            <td><a href="/proposals/{{ p.id }}">Open</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="card">
+    No proposals yet. For Orchestrate, use `POST /api/scheduling/propose`.
+  </div>
+{% endif %}
+
+{% endblock %}
+
