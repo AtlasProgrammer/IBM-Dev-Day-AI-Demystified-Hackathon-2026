@@ -41,7 +41,8 @@ from backend.services.orchestrator import (
 from backend.services.timeutil import ensure_aware, now, tz
 
 
-app = FastAPI(title=settings.app_name)
+_base_url = (settings.base_url or "").rstrip("/")
+app = FastAPI(title=settings.app_name, servers=[{"url": _base_url}])
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 scheduler: AsyncIOScheduler | None = None
